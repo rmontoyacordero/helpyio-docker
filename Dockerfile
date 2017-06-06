@@ -1,6 +1,6 @@
 FROM ruby:2.2
 
-ENV HELPY_VERSION=1.1.0 \
+ENV HELPY_VERSION=1.2.1 \
     RAILS_ENV=production \
     HELPY_HOME=/helpy \
     HELPY_USER=helpyuser \
@@ -26,6 +26,8 @@ RUN sed -i '/ruby "2.2.1"/d' $HELPY_HOME/Gemfile
 # add the slack integration gem to the Gemfile if the HELPY_SLACK_INTEGRATION_ENABLED is true
 # use `test` for sh compatibility, also use only one `=`. also for sh compatibility
 RUN test "$HELPY_SLACK_INTEGRATION_ENABLED" = "true" && sed -i '$ a\gem "helpy_slack", git: "https://github.com/helpyio/helpy_slack.git", branch: "master"' $HELPY_HOME/Gemfile
+
+RUN echo 'gem "breadcrumbs_on_rails"' >> $HELPY_HOME/Gemfile
 
 RUN bundle install
 
