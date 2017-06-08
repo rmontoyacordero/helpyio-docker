@@ -20,6 +20,7 @@ done
 echo "postgres is now avaliable"
 
 RUN_PREPARE=${DO_NOT_PREPARE:-false}
+/bin/chown -R helpy:help /home/helpy
 
 if [[ "$RUN_PREPARE" = "false" ]]
   then
@@ -30,5 +31,4 @@ if [[ "$RUN_PREPARE" = "false" ]]
 fi
 
 echo "starting unicorn"
-
 exec bundle exec unicorn -E production -c config/unicorn.rb
