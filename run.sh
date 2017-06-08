@@ -23,7 +23,7 @@ echo "postgres is now avaliable"
 RUN_PREPARE=${DO_NOT_PREPARE:-false}
 #sudo /bin/chown -R helpy:helpy /home/helpy
 
-if [[ test -f .setup ]]
+if [[ $(test -f .setup) -ne 0 ]]
   then
     echo "DO_NOT_PREPARE is not set or is false, preparing.."
     bundle exec rake assets:precompile
