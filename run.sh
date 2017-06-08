@@ -11,7 +11,7 @@ sleep $SLEEPSECONDS
 pg_isready -q -h postgres
 ISREADY=$?
 while [[ "$ISREADY" != 0 ]]; do
-  pg_isready -q -h postgres
+  pg_isready -q -h $POSTGRES_HOST -p $POSTGRES_PORT
   let ISREADY=$?
   echo "waiting $SLEEPSECONDS seconds for postgres.."
   sleep $SLEEPSECONDS
