@@ -11,7 +11,7 @@ RUN apt-get update \
   && apt-get install -y nodejs postgresql-client imagemagick --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
-RUN useradd --home /user/$HELPY_USER -m -U -s /bin/bash web
+RUN useradd --home /home/$HELPY_USER -m -U -s /bin/bash web
 #allow some limited sudo commands for user `web`
 RUN echo 'Defaults !requiretty' >> /etc/sudoers; \
     echo 'web ALL= NOPASSWD: /usr/sbin/dpkg-reconfigure -f noninteractive tzdata, /usr/bin/tee /etc/timezone, /bin/chown -R $HELPY_USER\:$HELPY_USER /var/www, /bin/chown -R $HELPY_USER\:$HELPY_USER /home/$HELPY_USER' >> /etc/sudoers;
