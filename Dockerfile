@@ -38,7 +38,7 @@ RUN chmod +r /usr/local/bundle/gems/griddler-mandrill-1.1.3/lib/griddler/mandril
 # this ensures that helpy can write precompiled assets to it
 RUN mkdir -p $HELPY_HOME/public/assets && chown $HELPY_USER $HELPY_HOME/public/assets
 
-VOLUME $HELPY_HOME/public
+#VOLUME $HELPY_HOME/pub
 
 COPY database.yml $HELPY_HOME/config/database.yml
 COPY run.sh $HELPY_HOME/run.sh
