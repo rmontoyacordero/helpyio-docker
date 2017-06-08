@@ -9,7 +9,7 @@ ENV HELPY_VERSION=1.2.1 \
 
 RUN apt-get update \
   && apt-get upgrade -y \
-  && apt-get install -y nodejs postgresql-client imagemagick --no-install-recommends \
+  && apt-get install -y nodejs postgresql-client imagemagick sudo --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m -U -s /bin/bash $HELPY_USER
