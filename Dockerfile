@@ -2,7 +2,7 @@ FROM ruby:2.2
 
 ENV HELPY_VERSION=1.2.1 \
     RAILS_ENV=production \
-    HELPY_HOME=/user/helpy \
+    HELPY_HOME=/home/helpy \
     HELPY_USER=helpyuser \
     HELPY_SLACK_INTEGRATION_ENABLED=true
 
