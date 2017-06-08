@@ -23,14 +23,13 @@ echo "postgres is now avaliable"
 RUN_PREPARE=${DO_NOT_PREPARE:-false}
 #sudo /bin/chown -R helpy:helpy /home/helpy
 
-if [[ $(test -f .setup) -ne 0 ]]
+if [[ "$RUN_PREPARE" = "false" ]]
   then
     echo "DO_NOT_PREPARE is not set or is false, preparing.."
     bundle exec rake assets:precompile
     bundle exec rake db:migrate
     bundle exec rake db:seed || echo "db is already seeded"
 fi
-touch .setup
 
 echo "starting unicorn"
 exec bundle exec unicorn -E production -c config/unicorn.rb
