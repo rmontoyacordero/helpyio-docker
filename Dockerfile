@@ -36,14 +36,15 @@ RUN echo 'gem "breadcrumbs_on_rails"' >> $HELPY_HOME/Gemfile
 
 RUN bundle install
 
-RUN touch /helpy/log/production.log && chmod 0664 /helpy/log/production.log
+RUN mkdir -p $HELPY_HOME/log
+RUN touch $HELPY_HOME/log/production.log && chmod 0664 $HELPY_HOME/log/production.log
 
 # Due to a weird issue with one of the gems, execute this permissions change:
 RUN chmod +r /usr/local/bundle/gems/griddler-mandrill-1.1.3/lib/griddler/mandrill/adapter.rb
 
 # manually create the /helpy/public/assets folder and give the helpy user rights to it
 # this ensures that helpy can write precompiled assets to it
-RUN mkdir -p $HELPY_HOME/public/assets && chown $HELPY_USER $HELPY_HOME/public/assets
+RUN mkdir -p $HELPY_HOME/public/assets && chown $HELPY_USER:$HELPY_USER $HELPY_HOME/public/assets
 
 COPY database.yml $HELPY_HOME/config/database.yml
 COPY run.sh $HELPY_HOME/run.sh
