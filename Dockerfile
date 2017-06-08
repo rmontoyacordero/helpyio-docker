@@ -49,4 +49,4 @@ RUN mkdir -p $HELPY_HOME/public/assets && chown $HELPY_USER:$HELPY_USER $HELPY_H
 COPY database.yml $HELPY_HOME/config/database.yml
 COPY run.sh $HELPY_HOME/run.sh
 
-CMD ["./run.sh"]
+#CMD ["./run.sh"]
