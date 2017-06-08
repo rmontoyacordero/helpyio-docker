@@ -2,6 +2,7 @@ FROM ruby:2.2
 
 ENV HELPY_VERSION=1.2.1 \
     RAILS_ENV=production \
+    HELPY_HOME_TOP=/home \
     HELPY_HOME=/home/helpy \
     HELPY_USER=helpyuser \
     HELPY_SLACK_INTEGRATION_ENABLED=true
@@ -11,15 +12,19 @@ RUN apt-get update \
   && apt-get install -y nodejs postgresql-client imagemagick --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
-RUN useradd --home $HELPY_HOME -m -U -s /bin/bash $HELPY_USER
+RUN useradd -m -U -s /bin/bash $HELPY_USER
 RUN echo 'Defaults !requiretty' >> /etc/sudoers; \
     echo "$HELPY_USER ALL= NOPASSWD: /usr/sbin/dpkg-reconfigure -f noninteractive tzdata, /usr/bin/tee /etc/timezone, /bin/chown -R $HELPY_USER\:$HELPY_USER /var/www, /bin/chown -R $HELPY_USER\:$HELPY_USER $HELPY_HOME" >> /etc/sudoers;
-RUN chown -R $HELPY_USER:$HELPY_USER $HELPY_HOME /usr/local/lib/ruby /usr/local/bundle
+RUN chown -R $HELPY_USER:$HELPY_USER /usr/local/lib/ruby /usr/local/bundle
 
-WORKDIR $HELPY_HOME
+WORKDIR $HELPY_HOME_TOP
+RUN git clone --branch $HELPY_VERSION --depth=1 https://github.com/helpyio/helpy.git
+RUN chown -R $HELPY_USER:$HELPY_USER $HELPY_HOME 
+
 USER $HELPY_USER
+WORKDIR $HELPY_HOME
 
-RUN git clone --branch $HELPY_VERSION --depth=1 https://github.com/helpyio/helpy.git .
+
 # modify Gemfile to remove the line which says 'ruby "2.2.1"' to use a newer ruby version
 RUN sed -i '/ruby "2.2.1"/d' $HELPY_HOME/Gemfile
 
