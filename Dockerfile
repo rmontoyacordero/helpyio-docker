@@ -2,17 +2,20 @@ FROM ruby:2.2
 
 ENV HELPY_VERSION=1.2.1 \
     RAILS_ENV=production \
-    HELPY_HOME=/helpy \
+    HELPY_HOME=/user/helpy \
     HELPY_USER=helpyuser \
     HELPY_SLACK_INTEGRATION_ENABLED=true
 
 RUN apt-get update \
   && apt-get upgrade -y \
   && apt-get install -y nodejs postgresql-client imagemagick --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/* \
-  && useradd --no-create-home $HELPY_USER \
-  && mkdir -p $HELPY_HOME \
-  && chown -R $HELPY_USER:$HELPY_USER $HELPY_HOME /usr/local/lib/ruby /usr/local/bundle
+  && rm -rf /var/lib/apt/lists/*
+
+RUN useradd --home /user/$HELPY_USER -m -U -s /bin/bash web
+#allow some limited sudo commands for user `web`
+RUN echo 'Defaults !requiretty' >> /etc/sudoers; \
+    echo 'web ALL= NOPASSWD: /usr/sbin/dpkg-reconfigure -f noninteractive tzdata, /usr/bin/tee /etc/timezone, /bin/chown -R $HELPY_USER\:$HELPY_USER /var/www, /bin/chown -R $HELPY_USER\:$HELPY_USER /home/$HELPY_USER' >> /etc/sudoers;
+RUN chown -R $HELPY_USER:$HELPY_USER $HELPY_HOME /usr/local/lib/ruby /usr/local/bundle
 
 WORKDIR $HELPY_HOME
 
