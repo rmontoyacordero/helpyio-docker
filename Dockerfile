@@ -11,17 +11,15 @@ RUN apt-get update \
   && apt-get install -y nodejs postgresql-client imagemagick --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
-RUN useradd --home /home/$HELPY_USER -m -U -s /bin/bash $HELPY_USER
+RUN useradd --home $HELPY_HOME -m -U -s /bin/bash $HELPY_USER
 RUN echo 'Defaults !requiretty' >> /etc/sudoers; \
-    echo "$HELPY_USER ALL= NOPASSWD: /usr/sbin/dpkg-reconfigure -f noninteractive tzdata, /usr/bin/tee /etc/timezone, /bin/chown -R $HELPY_USER\:$HELPY_USER /var/www, /bin/chown -R $HELPY_USER\:$HELPY_USER /home/$HELPY_USER" >> /etc/sudoers;
+    echo "$HELPY_USER ALL= NOPASSWD: /usr/sbin/dpkg-reconfigure -f noninteractive tzdata, /usr/bin/tee /etc/timezone, /bin/chown -R $HELPY_USER\:$HELPY_USER /var/www, /bin/chown -R $HELPY_USER\:$HELPY_USER $HELPY_HOME" >> /etc/sudoers;
 RUN chown -R $HELPY_USER:$HELPY_USER $HELPY_HOME /usr/local/lib/ruby /usr/local/bundle
 
 WORKDIR $HELPY_HOME
-
 USER $HELPY_USER
 
 RUN git clone --branch $HELPY_VERSION --depth=1 https://github.com/helpyio/helpy.git .
-
 # modify Gemfile to remove the line which says 'ruby "2.2.1"' to use a newer ruby version
 RUN sed -i '/ruby "2.2.1"/d' $HELPY_HOME/Gemfile
 
